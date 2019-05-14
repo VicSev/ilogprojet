@@ -1,8 +1,8 @@
 PARTIE AFFICHAGE :
-- faire le squelette de la page
-- faire affichage d'une dataset en point avec d3js
-- adapter taille de la fenetre d'affichage avec écran (proportionnel)
-- adapter les coordonnées des points de la dataset à la fenetre d'affichage (function)
+- ~~faire le squelette de la page~~
+- ~~faire affichage d'une dataset en point avec d3js~~
+- ~~adapter taille de la fenetre d'affichage avec écran (proportionnel)~~
+- ~~adapter les coordonnées des points de la dataset à la fenetre d'affichage (function)~~
 - ajouter bouton de recherche et zone de saisie recherche
 - ajouter bouton d'import
 

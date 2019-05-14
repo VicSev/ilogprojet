@@ -29,8 +29,11 @@
             var h = heightWindow - 2*iMarginBottom - 2*iMarginTop - heightCard + heightBodyCard - 4*paddingBodyCard;
             console.log('var h after compute:'+h);
 
+            // apply width & height to the elements
             document.getElementById('graphCard').style.width = w+'px';
             document.getElementById('graphCard').style.height = h+'px';
+
+            document.getElementById('caractCard').style.height = h+'px';
 
 
             var dataset = [
@@ -110,6 +113,47 @@
             console.log('... dataset changed');
             return dataset;
         }
+
+        /**
+        * update the word display in the left card
+        **/
+        function updateCaractDisplay(word){
+
+            console.log('update left card');
+
+            // update word to display as card's title
+            var card = document.getElementById('caractCardTitle');
+            console.log(card.innerHTML);
+            card.innerHTML = '<b>'+word.label+'</b>';
+
+            for (var key in word){
+                console.log(key+':'+word[key]);
+
+                // récupérer le nombre de lignes actuelles
+                var nbLignes = document.getElementById("caractTable").rows.length;
+                console.log('nbLignes:'+nbLignes);
+
+                // inserer à la dernière ligne
+                l = document.getElementById("caractTable").insertRow(nbLignes);
+
+                // insérer 2 cellules
+                c1 = l.insertCell();
+                c2 = l.insertCell();
+
+                // insérer le texte dans chaque cellule
+                c1.appendChild(document.createTextNode(key));
+                c2.appendChild(document.createTextNode(word[key]));
+
+            }
+
+
+
+
+        }
+
+
+
+
 
         function handleMouseOver(d, i) {  // Add interactivity
 

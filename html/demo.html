@@ -10,47 +10,98 @@
 	</head>
 	<body>
 
-		<h1>Luis</h1>
 		<script type="text/javascript">
 
 			//Width and height
-			var w = 500;
-			var h = 100;
-			
-			var dataset = [
-                  [ 5,     20 ],
-                  [ 480,   90 ],
-                  [ 250,   50 ],
-                  [ 100,   33 ],
-                  [ 330,   95 ],
-                  [ 410,   12 ],
-                  [ 475,   44 ],
-                  [ 25,    67 ],
-                  [ 85,    21 ],
-                  [ 220,   88 ]
-			  ];
-			
-			//Create SVG element
-			var svg = d3.select("body")
-						.append("svg")
-						.attr("width", w)
-						.attr("height", h);
+			var w = window.innerWidth,
+			h = window.innerHeight,
+			margin = { top: 40, right: 20, bottom: 20, left: 40 },
+			radius = 6;
 
-			svg.selectAll("circle")
-			   .data(dataset)
-			   .enter()
-			   .append("circle")
-			   .attr("cx", function(d) {
-			   		return d[0];
-			   })
-			   .attr("cy", function(d) {
-			   		return d[1];
-			   })
-			   .attr("r", function(d) {
-			   		return 2;
-			   });
+
+			var dataset = [
+				{ x: 100, y: 110, z: 'hello' },
+				{ x: 83, y: 43, z: 'hello' },
+				{ x: 92, y: 28, z: 'hello' },
+				{ x: 49, y: 74, z: 'hello' },
+				{ x: 51, y: 10, z: 'hello' },
+				{ x: 25, y: 98, z: 'hello' },
+				{ x: 77, y: 30, z: 'hello' },
+				{ x: 20, y: 83, z: 'hello' },
+				{ x: 11, y: 63, z: 'hello' },
+				{ x:  4, y: 55, z: 'hello' },
+				{ x: 85, y: 100, z: 'hello' },
+				{ x: 60, y: 40, z: 'hello' },
+				{ x: 70, y: 80, z: 'hello' },
+				{ x: 10, y: 20, z: 'hello' },
+				{ x: 40, y: 50, z: 'hello' },
+				{ x: 25, y: 31, z: 'hello' }
+			];
+						
+
+			//Create SVG element
+			var svg = d3.select("body").append("svg").attr({
+        		width: w,
+        		height: h
+			  });
+			 
 			
+			var xScale = d3.scale.linear()
+         		.domain([0, d3.max(dataset, function (d) { return d.x + 10; })])
+          		.range([margin.left, w - margin.right]);  // Set margins for x specific
+
+      		// We're passing in a function in d3.max to tell it what we're maxing (y value)
+     		var yScale = d3.scale.linear()
+          		.domain([0, d3.max(dataset, function (d) { return d.y + 10; })])
+          		.range([margin.top, h - margin.bottom]);  // Set margins for y specific
+
+			
+			var circleAttrs = {
+          		cx: function(d) { return xScale(d.x); },
+				cy: function(d) { return yScale(d.y); },
+				r: radius
+			};
+			
+
+			//Create SVG circle
+			svg.selectAll("circle")
+				.data(dataset)
+				.enter()
+				.append("circle")
+				.attr(circleAttrs)  // Get attributes from circleAttrs var
+				.on("mouseover", handleMouseOver)
+				.on("mouseout", handleMouseOut);
+
+			
+			function handleMouseOver(d, i) {  // Add interactivity
+					// Use D3 to select element, change color and size
+					d3.select(this).attr({
+					fill: "orange",
+					r: radius * 2
+					});
+
+					// Specify where to put label of text
+					svg.append("text").attr({
+					id: "t" + d.x + "-" + d.y + "-" + i,  // Create an id for text so we can select it later for removing on mouseout
+						x: function() { return xScale(d.x) - 30; },
+						y: function() { return yScale(d.y) - 15; }
+					})
+					.text(function() {
+					return [d.z];  // Value of the text
+					});
+			}
+
+			function handleMouseOut(d, i) {
+            	// Use D3 to select element, change color back to normal
+            	d3.select(this).attr({
+              		fill: "black",
+             		 r: radius
+           		});
+
+            	// Select text by id and then remove
+           		d3.select("#t" + d.x + "-" + d.y + "-" + i).remove();  // Remove text location
+          	}
 		</script>
-		
 	
-</body></html>
+</body>
+</html>

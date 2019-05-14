@@ -220,4 +220,6 @@
             .text(function() {
                 return [d.label];  // Value of the text
             });
+
+            updateCaractDisplay(d);
         }

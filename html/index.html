@@ -35,8 +35,20 @@
           //  console.log('w:'+w);
           // console.log('h:'+h);
 
-            var w = width;
+            var winH = window.innerHeight; // for height
+            var winW = window.innerWidth; // for width
+            console.log('winW:'+winW);
+            console.log('winH:'+winH);
+
+           var wBody = document.getElementById('cardBody').offsetWidth;
+           var hBody = document.getElementById('cardBody').offsetHeight;
+            console.log('wBody:'+wBody);
+            console.log('hBody:'+hBody);
+
+           // var w = width;
             var h = height;
+            console.log('0.95*wBody'+(0.95 * wBody));
+            var w = 0.95 * wBody;
 
             document.getElementById('graphCard').style.width = w+'px';
             document.getElementById('graphCard').style.height = h+'px';
@@ -82,18 +94,23 @@
     </script>
 
 
-  <div class="card">
+    <main style="margin-bottom: 3%;margin-top: 1%">
+        <div class="container-fluid">
+
+            <div class="card">
 
       <div class="card-header">
           <h1>DEMO</h1>
       </div>
 
-      <div class="card-body" >
+    <div class="card text-center">
 
+        <div class="card-body" id="cardBody">
+        <p>Graph des mots</p>
         <div class="card" id="graphCard">
 
             <script>
-                createGraph(1710, 100);
+                createGraph(1138, 100);
             </script>
 
         </div>
@@ -101,12 +118,21 @@
 
       </div>
 
+    </div>
+
+
+
       <div class="card-footer">
           <h5>by Luis&Victor</h5>
       </div>
 
 
   </div>
+
+        </div>
+    </main>
+
+
 
 
 

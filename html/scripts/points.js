@@ -1,4 +1,4 @@
-var margin = { top: 40, right: 20, bottom: 20, left: 40 };
+        var margin = { top: 40, right: 20, bottom: 20, left: 40 };
 		var radius = 4;
 
         function createGraph(){
@@ -139,13 +139,13 @@ var margin = { top: 40, right: 20, bottom: 20, left: 40 };
 
 					// Use D3 to select element, change color and size
 					d3.select(this).attr({
-					fill: "orange",
+					fill: "blue",
 					r: radius * 1.2
 					});
 
 					// Specify where to put label of text
 					svg.append("text").attr({
-					id: "t" + d.x + "-" + d.y + "-" + i,  // Create an id for text so we can select it later for removing on mouseout
+					id: "t" + d.label + "-" + i,  // Create an id for text so we can select it later for removing on mouseout
 						x: function() { return d.x - 30; },
 						y: function() { return d.y - 15; }
 					})
@@ -162,5 +162,5 @@ var margin = { top: 40, right: 20, bottom: 20, left: 40 };
            		});
 
             	// Select text by id and then remove
-           		d3.select("#t" + d.x + "-" + d.y + "-" + i).remove();  // Remove text location
+           		d3.select("#t" + d.label + "-" + i).remove();  // Remove text location
           	}

@@ -128,8 +128,12 @@
             console.log(card.innerHTML);
             card.innerHTML = '<b>'+word.label+'</b>';
 
+            // display in HTML table
+            clearTabHTML();
             for (var key in word){
                 console.log(key+':'+word[key]);
+
+
 
                 // récupérer le nombre de lignes actuelles
                 var nbLignes = document.getElementById("caractTable").rows.length;
@@ -150,6 +154,19 @@
         }
 
 
+        function clearTabHTML() {
+            // effacer toutes les ligne
+
+            tab = document.getElementById("caractTable");
+            imax = tab.rows.length;
+            console.log('imax:'+imax);
+            for (var i=imax;i>0;i--){
+                console.log(i);
+                document.getElementById("caractTable").deleteRow(i-1);
+
+            }
+
+        }
 
 
 

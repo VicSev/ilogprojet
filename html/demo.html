@@ -125,8 +125,7 @@
 				})
 				// Retire le texte de l'ancien point sélectionné
 				d3.select("t-selected-text").remove();
-				
-				console.log(d);
+			
 
 				// Use D3 to select element, change color and size. Plus set up a specific id for this point
 				d3.select(this).attr({
@@ -144,6 +143,36 @@
 				.text(function() {					
 					return [d.z];  // Value of the text
 				});
+
+				var proche = getNearest(d, 5);
+				console.log(proche);
+				
+			}
+
+			function getDistance(d1, d2){
+				return Math.sqrt(Math.pow(d2.y - d1.y, 2) + Math.pow(d2.x - d1.x, 2));
+			}
+
+			function getNearest(d, limit){
+				var copy = dataset.filter(v => v != d);
+				var nearObjectTab = [];
+				var nearObject;
+				var i = 0;
+
+				while(i < limit){
+					var nearIndex = null;
+					for (const j of copy) {
+						var dist = getDistance(d,j);
+						if(dist < nearIndex || nearIndex == null){
+							nearIndex = dist;
+							nearObject = j;
+						}
+					}
+					nearObjectTab.push(nearObject);
+					copy = copy.filter(v => v != nearObject);
+					i++;
+				}
+				return nearObjectTab;
 			}
 
 			

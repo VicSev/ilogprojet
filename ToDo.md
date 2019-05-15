@@ -4,7 +4,9 @@ PARTIE AFFICHAGE :
 - ~~adapter taille de la fenetre d'affichage avec écran (proportionnel)~~
 - ~~adapter les coordonnées des points de la dataset à la fenetre d'affichage (function)~~
 - ajouter bouton de recherche et zone de saisie recherche
-- ajouter bouton d'import
+- ~~ajouter bouton d'import~~
+- afficher les mots voisins
+- convertir fichier tsv en JSON
 
 
 

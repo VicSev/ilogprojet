@@ -35,7 +35,7 @@
             <div class="card" id="card">
 
       <div class="card-header" id="cardHeader">
-          <h1>DEMO</h1>
+          <h1>AFFICHEUR Word2Vec</h1>
       </div>
 
 
@@ -57,14 +57,12 @@
                 <div class="card" id="graphCard">
 
                 <script>
-                    createGraph();
+                  //  createGraph();
                 </script>
 
                 </div>
               </div>
             </div>
-
-
 
         </div>
 
@@ -72,7 +70,8 @@
 
 
       <div class="card-footer" id="cardFooter">
-          <h5>by Luis&Victor</h5>
+        <input type="file" id="myFile">
+        <button type="button" class="btn btn-outline-dark" onclick="readDataFromFile()">Load dataset</button>
       </div>
 
 

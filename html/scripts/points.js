@@ -97,22 +97,15 @@
             console.log('changing dataset ...');
 
             for (var vector in dataset) {
-               // console.log('vector:'+vector+' ['+dataset[vector].x+' , '+dataset[vector].y+']');
 
-                // [-1;1] -> [0;2]
-                dataset[vector].x = parseFloat(dataset[vector].x) + 1;
-                dataset[vector].y = parseFloat(dataset[vector].y) + 1;
-
-                // [0;2] -> [0;1]
-                dataset[vector].x = dataset[vector].x / 2;
-                dataset[vector].y = dataset[vector].y / 2;
-
+                // save init coordinates
+                dataset[vector].xInit = dataset[vector].x
+                dataset[vector].yInit = dataset[vector].y
 
                 // new position
-                dataset[vector].x = dataset[vector].x*maxWidth;
-                dataset[vector].y = dataset[vector].y*maxHeight;
-
-              // console.log('vector:'+vector+' ['+dataset[vector].x+' , '+dataset[vector].y+']');
+                // [-1;1] -> [0;2] -> [0;1] -> * [maxW;maxH]
+                dataset[vector].x = maxWidth * (parseFloat(dataset[vector].x) + 1) / 2;
+                dataset[vector].y = maxHeight * (parseFloat(dataset[vector].y) + 1) / 2;
             }
             displayJSONinConsole(dataset);
             console.log('... dataset changed');
@@ -267,7 +260,6 @@
                          r: radius
                     });
                 }
-
 
             	// Select text by id and then remove
            		d3.select("#t" + d.label + "-" + i).remove();  // Remove text location

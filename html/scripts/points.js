@@ -239,10 +239,13 @@
 					var svg = d3.select('#svg');
 
 					// Use D3 to select element, change color and size
-					d3.select(this).attr({
-					//fill: "blue",
-					r: radius * 1.2
-					});
+					var idPoint = d3.select(this).attr('id');
+                    if (idPoint != 't-selected'){
+                        d3.select(this).attr({
+                        fill: "black",
+                        r: radius * 1.2
+                        });
+					}
 
 					// Specify where to put label of text
 					svg.append("text").attr({
@@ -257,10 +260,14 @@
 
         function handleMouseOut(d, i) {
             	// Use D3 to select element, change color back to normal
-            	d3.select(this).attr({
-              		//fill: "black",
-             		 r: radius
-           		});
+            	var idPoint = d3.select(this).attr('id');
+                if (idPoint != 't-selected'){
+                    d3.select(this).attr({
+                         fill: "gray",
+                         r: radius
+                    });
+                }
+
 
             	// Select text by id and then remove
            		d3.select("#t" + d.label + "-" + i).remove();  // Remove text location

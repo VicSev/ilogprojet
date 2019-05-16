@@ -1,10 +1,12 @@
         var margin = { top: 40, right: 20, bottom: 20, left: 40 };
 		var radius = 4;
 
+        var datasetGlobal = null;
+
         function createGraph(dataset){
 
             console.log('createGraph with dataset = \n'+dataset);
-
+            datasetGlobal = dataset;
             //Width and height
 
             // SET WIDTH
@@ -77,7 +79,8 @@
           		cx: function(d) { return d.x; },
 				cy: function(d) { return d.y; },
 				r: radius,
-				fill: 'gray'
+				fill: 'gray',
+				id: function(d) { return d.label; }
 			};
 
 
@@ -226,6 +229,61 @@
             }
         }
 
+
+        // Colorize the nearest vector's neighboors form the selected point
+        function ColorizeNearest(tab) {
+            d3.selectAll("circle").attr({
+                fill: "grey"
+            });
+            for (const i of tab) {
+
+                d3.select("#" + i.label.toString())
+                    .attr({
+                        fill: "orange",
+                    });
+            }
+        }
+
+        // Give the euclidian distance between 2 vector
+        function getDistanceEuclidienne(d1, d2) {
+            return Math.sqrt(Math.pow(d2.y - d1.y, 2) + Math.pow(d2.x - d1.x, 2));
+        }
+
+        // Give a list of [limit] nearest vector from the vector [d]
+        function getNearest(d, limit) {
+
+            // get the dataset
+            var dataset  = datasetGlobal;
+            console.log('dataset:'+dataset);
+
+            if(limit > dataset.length){
+                console.log('limit > dataset.length:'+limit+'>'+dataset.length);
+                limit = dataset.length - 1;
+            }
+            var copy = dataset.filter(v => v != d);
+            var nearObjectTab = [];
+            var nearObject;
+            var i = 0;
+
+            while(i < limit){
+                var nearIndex = null;
+                for (const j of copy) {
+                    var dist = getDistanceEuclidienne(d,j);
+                    if(dist < nearIndex || nearIndex == null){
+                        nearIndex = dist;
+                        nearObject = j;
+                    }
+                }
+                nearObjectTab.push(nearObject);
+                var strKeyNearest = 'nearest'+(i+1);
+                d[strKeyNearest] = nearObject.label;
+                copy = copy.filter(v => v != nearObject);
+                i++;
+            }
+            return nearObjectTab;
+        }
+
+
         function handleMouseOver(d, i) {  // Add interactivity
 
 					// get the element SVG
@@ -280,8 +338,11 @@
             d3.select("#t" + "-" + "selected")
             .text(function() {return ''})
             .attr({
-                id: "t"
+                id: ""
             });
+
+            // Colorise les n-1 voisins plus proche du point selectionné
+            ColorizeNearest(getNearest(d, 2));
 
             // Use D3 to select element, change color and size. Plus set up a specific id for this point
             d3.select(this).attr({

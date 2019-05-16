@@ -297,26 +297,33 @@
         // @param d is a word
         function selectPoint(d){
 
+
             // get the element SVG
             var svg = d3.select('#svg');
 
+            // get text of last selected
+            var lastLabel = d3.select("text").text();
+            console.log('lastLabel:'+lastLabel);
+
+
+
             // Retire la couleur de l'ancien point sélectionné
-            d3.select("#t-selected").attr({
+            d3.select("#c-selected").attr({
                 fill: "gray",
                 r: radius,
-                id: ""
+                id: lastLabel.toString()
             });
 
-            // get text of last selected
-            //var lastLabel = d3.select("#t-selected").text();
-            //console.log('lastLabel:'+lastLabel);
 
             // Retire le texte de l'ancien point sélectionné
             d3.select("#t-selected")
             .text(function() {return ''})
             .attr({
-                id: ""
+                id: 'lastSelected'
             });
+
+            // Select text by id and then remove
+           	d3.select("#lastSelected").remove();  // Remove text location
 
             // Colorise les n-1 voisins plus proche du point selectionné
             ColorizeNearest(getNearest(d, 2));
@@ -325,7 +332,7 @@
             d3.select('#'+d.label).attr({
                 fill: "blue",
                 r: radius * 1.2,
-                id: "t-selected"
+                id: "c-selected"
             });
 
             // Specify where to put label of text
@@ -348,7 +355,13 @@
             var word = document.getElementById('inputWord').value;
             console.log('wordToSearch:'+word);
 
-            selectPoint(labelToData(word));
+            var d = labelToData(word);
+            if (d == null){
+                alert(word+' is not part of the dataset');
+            }
+            else{
+                selectPoint(d);
+            }
         }
 
 
@@ -359,7 +372,7 @@
 
 					// Use D3 to select element, change color and size
 					var idPoint = d3.select(this).attr('id');
-                    if (idPoint != 't-selected'){
+                    if (idPoint != 'c-selected'){
                         d3.select(this).attr({
                         fill: "black",
                         r: radius * 1.2
@@ -380,7 +393,7 @@
         function handleMouseOut(d, i) {
             	// Use D3 to select element, change color back to normal
             	var idPoint = d3.select(this).attr('id');
-                if (idPoint != 't-selected'){
+                if (idPoint != 'c-selected'){
                     d3.select(this).attr({
                          fill: "gray",
                          r: radius
@@ -394,47 +407,4 @@
         function handleMouseClick(d, i){
 
             selectPoint(d);
-/*
-            // get the element SVG
-            var svg = d3.select('#svg');
-
-            // Retire la couleur de l'ancien point sélectionné
-            d3.select("#t-selected").attr({
-                fill: "gray",
-                r: radius,
-                id: ""
-            });
-
-            // get text of last selected
-           // var lastLabel = d3.select("#t-selected").text();
-            //console.log('lastLabel:'+lastLabel);
-
-            // Retire le texte de l'ancien point sélectionné
-            d3.select("#t-selected")
-            .text(function() {return ''})
-            .attr({
-                id: ''
-            });
-
-            // Colorise les n-1 voisins plus proche du point selectionné
-            ColorizeNearest(getNearest(d, 2));
-
-            // Use D3 to select element, change color and size. Plus set up a specific id for this point
-            d3.select('#'+d.label).attr({
-                fill: "blue",
-                r: radius * 1.2,
-                id: "t-selected"
-            });
-
-            // Specify where to put label of text
-            svg.append("text").attr({
-                id: "t" + "-" + "selected",  // Create an id for text so we can select it later for removing on mouseout
-                x: function() { return d.x - 30; },
-                y: function() { return d.y - 15; }
-            })
-            .text(function() {
-                return [d.label];  // Value of the text
-            });
-
-            updateCaractDisplay(d);*/
         }

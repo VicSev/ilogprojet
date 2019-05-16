@@ -297,23 +297,25 @@
         // @param d is a word
         function selectPoint(d){
 
-
             // get the element SVG
             var svg = d3.select('#svg');
 
-            // get text of last selected
-            var lastLabel = d3.select("text").text();
-            console.log('lastLabel:'+lastLabel);
+            // attention: cas particulier si on recherche en premier
+            try {
+                // get text of last selected
+                var lastLabel = d3.select("text").text();
+                console.log('lastLabel:'+lastLabel);
 
-
-
-            // Retire la couleur de l'ancien point sélectionné
-            d3.select("#c-selected").attr({
-                fill: "gray",
-                r: radius,
-                id: lastLabel.toString()
-            });
-
+                // Retire la couleur de l'ancien point sélectionné
+                d3.select("#c-selected").attr({
+                    fill: "gray",
+                    r: radius,
+                    id: lastLabel.toString()
+                });
+            }
+            catch(error) {
+                console.log('first search');
+            }
 
             // Retire le texte de l'ancien point sélectionné
             d3.select("#t-selected")

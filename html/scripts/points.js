@@ -13,10 +13,8 @@
             var widthCardBody = document.getElementById('cardBody').offsetWidth;
             var cardBody = document.getElementById('cardBody');
             var padd = window.getComputedStyle(cardBody, null).getPropertyValue('padding-left');
-            console.log('padd:'+padd);
             var iPadd = (parseInt(padd.replace(/px/,"")));
             var widthColCaract = document.getElementById('colCaract').offsetWidth;
-            console.log('widthColCaract:'+widthColCaract);
             var w = widthCardBody - 2* iPadd - widthColCaract;
 
             // SET HEIGHT
@@ -29,14 +27,11 @@
             var heightBodyCard = document.getElementById('cardBody').offsetHeight;
             var heightCard = document.getElementById('card').offsetHeight;
             var paddingBodyCard = iPadd;
-            console.log('h='+heightWindow+'-'+iMarginBottom+'-'+iMarginTop+'-'+heightCard+'+'+heightBodyCard+'-2*'+paddingBodyCard);
             var h = heightWindow - 2*iMarginBottom - 2*iMarginTop - heightCard + heightBodyCard - 4*paddingBodyCard;
-            console.log('var h after compute:'+h);
 
             // apply width & height to the elements
             document.getElementById('graphCard').style.width = w+'px';
             document.getElementById('graphCard').style.height = h+'px';
-
             document.getElementById('caractCard').style.height = h+'px';
 
 
@@ -236,7 +231,7 @@
                 fill: "grey"
             });
             for (const i of tab) {
-
+                console.log('i.label.toString():'+i.label.toString());
                 d3.select("#" + i.label.toString())
                     .attr({
                         fill: "orange",
@@ -283,6 +278,79 @@
             return nearObjectTab;
         }
 
+        // get the data corresponding to the label
+        function labelToData(label){
+            console.log('labelToData('+label+');');
+            var d = null;
+            var dataset = datasetGlobal;
+            for (var i in dataset){
+                console.log(i+':'+dataset[i].label);
+                if (dataset[i].label == label){
+                    d = dataset[i];
+                    break;
+                }
+            }
+            return d;
+        }
+
+        // select a point in the graph by function (not by clicking)
+        // @param d is a word
+        function selectPoint(d){
+
+            // get the element SVG
+            var svg = d3.select('#svg');
+
+            // Retire la couleur de l'ancien point sélectionné
+            d3.select("#t-selected").attr({
+                fill: "gray",
+                r: radius,
+                id: ""
+            });
+
+            // get text of last selected
+            //var lastLabel = d3.select("#t-selected").text();
+            //console.log('lastLabel:'+lastLabel);
+
+            // Retire le texte de l'ancien point sélectionné
+            d3.select("#t-selected")
+            .text(function() {return ''})
+            .attr({
+                id: ""
+            });
+
+            // Colorise les n-1 voisins plus proche du point selectionné
+            ColorizeNearest(getNearest(d, 2));
+
+            // Use D3 to select element, change color and size. Plus set up a specific id for this point
+            d3.select('#'+d.label).attr({
+                fill: "blue",
+                r: radius * 1.2,
+                id: "t-selected"
+            });
+
+            // Specify where to put label of text
+            svg.append("text").attr({
+                id: "t-selected",  // Create an id for text so we can select it later for removing on mouseout
+                x: function() { return d.x - 30; },
+                y: function() { return d.y - 15; }
+            })
+            .text(function() {
+                return [d.label];  // Value of the text
+            });
+
+            updateCaractDisplay(d);
+
+        }
+
+        function searchWord(){
+
+            // get word from the input
+            var word = document.getElementById('inputWord').value;
+            console.log('wordToSearch:'+word);
+
+            selectPoint(labelToData(word));
+        }
+
 
         function handleMouseOver(d, i) {  // Add interactivity
 
@@ -325,6 +393,8 @@
 
         function handleMouseClick(d, i){
 
+            selectPoint(d);
+/*
             // get the element SVG
             var svg = d3.select('#svg');
 
@@ -334,18 +404,23 @@
                 r: radius,
                 id: ""
             });
+
+            // get text of last selected
+           // var lastLabel = d3.select("#t-selected").text();
+            //console.log('lastLabel:'+lastLabel);
+
             // Retire le texte de l'ancien point sélectionné
-            d3.select("#t" + "-" + "selected")
+            d3.select("#t-selected")
             .text(function() {return ''})
             .attr({
-                id: ""
+                id: ''
             });
 
             // Colorise les n-1 voisins plus proche du point selectionné
             ColorizeNearest(getNearest(d, 2));
 
             // Use D3 to select element, change color and size. Plus set up a specific id for this point
-            d3.select(this).attr({
+            d3.select('#'+d.label).attr({
                 fill: "blue",
                 r: radius * 1.2,
                 id: "t-selected"
@@ -361,5 +436,5 @@
                 return [d.label];  // Value of the text
             });
 
-            updateCaractDisplay(d);
+            updateCaractDisplay(d);*/
         }

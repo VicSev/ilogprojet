@@ -2,7 +2,7 @@
 <html lang="en"><head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<meta charset="utf-8">
-		<title>D3 Demo: Making a scatterplot with SVG</title>
+		<title>DEMO</title>
 		<script type="text/javascript" src="scripts/d3.js"></script>
 		<style type="text/css">
 			/* No style rules here yet */		
@@ -17,7 +17,6 @@
 			h = window.innerHeight,
 			margin = { top: 40, right: 20, bottom: 20, left: 40 },
 			radius = 6;
-
 
 			var dataset = [
 				{ x: 100, y: 110, z: 'hello' },
@@ -71,10 +70,9 @@
           		cx: function(d) { return xScale(d.x); },
 				cy: function(d) { return yScale(d.y); },
 				r: radius,
-				fill: "blue"
+				fill: "blue",
+				id: function(d) { return d.z; }
 			};
-			
-			
 
 			//Create SVG circle
 			svg.selectAll("circle")
@@ -124,8 +122,14 @@
 					id: ""
 				})
 				// Retire le texte de l'ancien point sélectionné
-				d3.select("t-selected-text").remove();
+				d3.select("#t-selected-text")
+				    .text(function() {return ''})
+					.attr({
+						id: ""
+					});
 			
+				// Colorise les n voisins plus proche du point selectionné
+				ColorizeNearest(getNearest(d, 3));
 
 				// Use D3 to select element, change color and size. Plus set up a specific id for this point
 				d3.select(this).attr({
@@ -142,18 +146,33 @@
 				})
 				.text(function() {					
 					return [d.z];  // Value of the text
-				});
-
-				var proche = getNearest(d, 5);
-				console.log(proche);
-				
+				});						
 			}
 
-			function getDistance(d1, d2){
+			// Colorize the nearest vector's neighboors form the selected point
+			function ColorizeNearest(tab) {
+				d3.selectAll("circle").attr({
+					fill: "blue"
+				});
+				for (const i of tab) {
+
+					d3.select("#" + i.z.toString())
+						.attr({
+							fill: "red",
+						});
+				}
+			}
+
+			// Give the euclidian distance between 2 vector
+			function getDistanceEuclidienne(d1, d2) {
 				return Math.sqrt(Math.pow(d2.y - d1.y, 2) + Math.pow(d2.x - d1.x, 2));
 			}
 
-			function getNearest(d, limit){
+			// Give a list of [limit] nearest vector from the vector [d]
+			function getNearest(d, limit) {
+				if(limit > dataset.length){
+					limit = dataset.length - 1;
+				}
 				var copy = dataset.filter(v => v != d);
 				var nearObjectTab = [];
 				var nearObject;
@@ -162,7 +181,7 @@
 				while(i < limit){
 					var nearIndex = null;
 					for (const j of copy) {
-						var dist = getDistance(d,j);
+						var dist = getDistanceEuclidienne(d,j);
 						if(dist < nearIndex || nearIndex == null){
 							nearIndex = dist;
 							nearObject = j;
@@ -175,7 +194,7 @@
 				return nearObjectTab;
 			}
 
-			
+
 		</script>
 	
 </body>

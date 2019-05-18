@@ -3,10 +3,16 @@
 
         var datasetGlobal = null;
 
+        /**
+        * create a graph from a dataset
+        *
+        * @param dataset the data to display
+        **/
         function createGraph(dataset){
 
             console.log('createGraph with dataset = \n'+dataset);
             datasetGlobal = dataset;
+
             //Width and height
 
             // SET WIDTH
@@ -34,7 +40,7 @@
             document.getElementById('graphCard').style.height = h+'px';
             document.getElementById('caractCard').style.height = h+'px';
 
-             dataset = changeDataset(dataset, w, h);
+             dataset = changeDatasetCoordinates(dataset, w, h);
 
             //Create SVG element
 			var svg = d3.select("#graphCard").append("svg").attr({
@@ -74,7 +80,14 @@
 				.on("mouseout", handleMouseOut);
         }
 
-        function changeDataset(dataset, maxWidth, maxHeight){
+        /**
+        * change the scale of the coordinates
+        *
+        * @param dataset the data to change
+        * @param maxWidth the width max of svg
+        * @param maxHeight the height max of svg
+        **/
+        function changeDatasetCoordinates(dataset, maxWidth, maxHeight){
 
             console.log('changing dataset ...');
 
@@ -127,6 +140,9 @@
             }
         }
 
+        /**
+        * clear the HTML table which contains the caracteristics
+        **/
         function clearTabHTML() {
             // effacer toutes les ligne
 
@@ -204,7 +220,7 @@
 
         function displayJSONinConsole(json){
             for (key in json){
-                console.log(key+':'+json[key].x+'|'+json[key].y+'|'+json[key].label+'|'+json[key].o);
+                console.log(key+':'+json[key].x+'|'+json[key].y+'|'+json[key].label);
             }
         }
 
@@ -228,7 +244,14 @@
             return Math.sqrt(Math.pow(d2.y - d1.y, 2) + Math.pow(d2.x - d1.x, 2));
         }
 
-        // Give a list of [limit] nearest vector from the vector [d]
+        /**
+        * Give a list of [limit] nearest vector from the vector [d]
+        *
+        * @param d a word
+        * @param limit number of neighbours
+        *
+        * @return a list which contains all the neighbours
+        **/
         function getNearest(d, limit) {
 
             // get the dataset
@@ -262,7 +285,13 @@
             return nearObjectTab;
         }
 
-        // get the data corresponding to the label
+        /**
+        * get the data corresponding to the label
+        *
+        * @param label the label String to get
+        *
+        * @return the data corresponding to the label
+        **/
         function labelToData(label){
             console.log('labelToData('+label+');');
             var d = null;
@@ -335,6 +364,9 @@
 
         }
 
+        /**
+        * select a word by searching it with the search bar
+        **/
         function searchWord(){
 
             // get word from the input
